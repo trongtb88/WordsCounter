@@ -51,31 +51,34 @@ func main() {
 
 	// Get results from counter channel
 	for wordsMap := range wordsCountChannel{
+	 	wc :=  WordCount{}
 		for key, val := range wordsMap {
 			m[key] += val
+			wc.Word = key
+			wc.Count = m[key]
 		}
 	}
 
 	// Build list of words
 	for key, val := range m {
-		wordCounts = append(wordCounts, WordCount{word: key, count: val})
+		wordCounts = append(wordCounts, WordCount{Word: key, Count: val})
 	}
 
 
 	// Sort by number they occur
 	sort.Slice(wordCounts, func(i, j int) bool {
-		return wordCounts[i].count > wordCounts[j].count
+		return wordCounts[i].Count > wordCounts[j].Count
 	})
 
 	// Show the top-ten most frequent words
 	for i := 0; i < len(wordCounts) && i < 10; i++ {
-		fmt.Println(wordCounts[i].word, ":", wordCounts[i].count)
+		fmt.Println(wordCounts[i].Word, ":", wordCounts[i].Count)
 	}
 }
 
 type WordCount struct {
-	word  string
-	count int64
+	Word  string
+	Count int64
 }
 
 func timeTrack(start time.Time, name string) {
